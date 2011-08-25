@@ -26,7 +26,7 @@ Revision History
 Update project as standalone project
 Fixed code sample above
 0.9
-Update for correct Google Maps document format
+Update for correct Google Maps docu	ment format
 0.8
 Added GetMapPointFromLatLong method to acquire the lat/long for a supplied address
 0.7 
