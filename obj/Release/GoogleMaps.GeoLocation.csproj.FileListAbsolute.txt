@@ -8,3 +8,8 @@ c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationS
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Release\ResolveAssemblyReference.cache
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Release\GoogleMaps.Geolocation.dll
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Release\GoogleMaps.Geolocation.pdb
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Release\ResolveAssemblyReference.cache
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Release\GoogleMaps.Geolocation.dll
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Release\GoogleMaps.Geolocation.pdb
+J:\gitHubProjects\GoogleMaps.LocationServices\bin\Release\GoogleMaps.Geolocation.dll
+J:\gitHubProjects\GoogleMaps.LocationServices\bin\Release\GoogleMaps.Geolocation.pdb

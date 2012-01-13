@@ -13,3 +13,8 @@ c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationS
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Debug\ResolveAssemblyReference.cache
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Debug\GoogleMaps.Geolocation.dll
 c:\Users\swebster\Documents\Visual Studio 2010\Projects\git\GoogleMaps.LocationServices\obj\Debug\GoogleMaps.Geolocation.pdb
+J:\gitHubProjects\GoogleMaps.LocationServices\bin\Debug\GoogleMaps.Geolocation.dll
+J:\gitHubProjects\GoogleMaps.LocationServices\bin\Debug\GoogleMaps.Geolocation.pdb
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Debug\ResolveAssemblyReference.cache
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Debug\GoogleMaps.Geolocation.dll
+J:\gitHubProjects\GoogleMaps.LocationServices\obj\Debug\GoogleMaps.Geolocation.pdb
