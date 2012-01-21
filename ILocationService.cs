@@ -16,7 +16,7 @@ namespace GoogleMaps.Geolocation
         Region GetRegionFromLatLong(double Latitude, double Longitude);
         MapPoint GetLatLongFromAddress(string Address);
         Directions GetDirections(double Latitude, double Longitude);
-        Directions GetDirections(Address fromAddress, Address toAddress);
+        Directions GetDirections(AddressData fromAddress, AddressData toAddress);
 
     }
 }

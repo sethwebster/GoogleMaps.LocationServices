@@ -5,9 +5,9 @@ using System.Text;
 
 namespace GoogleMaps.Geolocation
 {
-    public class Address
+    public class AddressData
     {
-        public string Address1 { get; set; }
+        public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
@@ -15,7 +15,7 @@ namespace GoogleMaps.Geolocation
 
         public override string ToString()
         {
-            return String.Format("{0},{1},{2} {3}",Address1 != null ? Address1 : "", City != null ? City : "", State != null ? State : "", Zip != null ? Zip : "");
+            return String.Format("{0},{1},{2} {3}",Address != null ? Address : "", City != null ? City : "", State != null ? State : "", Zip != null ? Zip : "");
         }
     }
 }

@@ -46,7 +46,7 @@ namespace GoogleMaps.Geolocation
             return null;
         }
 
-        public Directions GetDirections(Address fromAddress, Address toAddress)
+        public Directions GetDirections(AddressData fromAddress, AddressData toAddress)
         {
             
             string googleUrlFormat = "http://maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
