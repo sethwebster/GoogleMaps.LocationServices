@@ -12,8 +12,8 @@
     
     <PropertyGroup>
         <MajorVersion>0</MajorVersion>
-        <MinorVersion>4</MinorVersion>
-        <Version>$(MajorVersion).$(MinorVersion).0</Version>
+        <MinorVersion>9</MinorVersion>
+        <Version>$(MajorVersion).$(MinorVersion).2</Version>
     </PropertyGroup>
     
   <!--  <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"

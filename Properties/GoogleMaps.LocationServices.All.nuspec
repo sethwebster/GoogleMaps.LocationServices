@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>GoogleMaps.LocationServices</id>
-    <version>0.9.1</version>
+    <version>$version$</version>
     <title>GoogleMaps.LocationServices</title>
     <authors>Seth Webster</authors>
     <owners>sethwebster</owners>
