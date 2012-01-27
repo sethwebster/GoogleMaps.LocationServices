@@ -8,12 +8,13 @@
     <ProjectGuid>{2C8E82BE-4562-4BD8-806E-2ABC806FF2B3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GoogleMaps.Geolocation</RootNamespace>
-    <AssemblyName>GoogleMaps.Geolocation</AssemblyName>
+    <RootNamespace>GoogleMaps.LocationServices</RootNamespace>
+    <AssemblyName>GoogleMaps.LocationServices</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\GoogleMaps.LocationServices\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <BuildPackage>true</BuildPackage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,9 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="Step.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GoogleMaps.LocationServices.nupkg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GoogleMaps.LocationServices.readme.txt" />

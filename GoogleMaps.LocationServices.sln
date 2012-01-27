@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleMaps.GeoLocation", "GoogleMaps.GeoLocation.csproj", "{2C8E82BE-4562-4BD8-806E-2ABC806FF2B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleMaps.LocationServices", "GoogleMaps.LocationServices.csproj", "{2C8E82BE-4562-4BD8-806E-2ABC806FF2B3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C0FF28E6-8A34-4C47-BCC7-D001DB0B9A66}"
 	ProjectSection(SolutionItems) = preProject
