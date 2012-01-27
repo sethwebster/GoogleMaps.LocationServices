@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Go" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+        <ProjectRoot>$(MSBuildProjectDirectory)\..</ProjectRoot>
+        <ArtifactsDir>$(ProjectRoot)\artifacts\$(Configuration)</ArtifactsDir>
+        <NuGetToolsPath>$(ProjectRoot)\.nuget</NuGetToolsPath>
+        <NuGetExePath>$(NuGetToolsPath)\nuget.exe</NuGetExePath>
+        <ToolsPath>$(ProjectRoot)\tools\</ToolsPath>
+        <XunitPath>$(ToolsPath)xunit\</XunitPath>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <MajorVersion>0</MajorVersion>
+        <MinorVersion>4</MinorVersion>
+        <Version>$(MajorVersion).$(MinorVersion).0</Version>
+    </PropertyGroup>
+    
+  <!--  <UsingTask AssemblyFile="$(XunitPath)xunit.runner.msbuild.dll"
+               TaskName="Xunit.Runner.MSBuild.xunit" />
+               
+    <ItemGroup>
+        <TestProjects Include="$(ProjectRoot)\SignalR.Tests\bin\$(Configuration)\SignalR.Tests.dll" />
+    </ItemGroup>
+-->
+    <Target Name="Go" DependsOnTargets="Build; BuildPackages">
+    </Target>
+    <!--
+    <Target Name="RunTests">
+        <xunit Assembly="%(TestProjects.FullPath)" />
+    </Target>
+    -->
+    <Target Name="CreateOutputDir">
+        <MakeDir Directories="$(ArtifactsDir)" Condition="!Exists('$(ArtifactsDir)')" />
+    </Target>
+    
+    <Target Name="Build" DependsOnTargets="CreateOutputDir">
+        <MSBuild Projects="$(ProjectRoot)\GoogleMaps.GeoLocation.sln" 
+                 Targets="Build" 
+                 Properties="BuildPackage=true;Version=$(Version);PackageOutputDir=$(ArtifactsDir);Configuration=$(Configuration)" />
+    </Target>
+    
+    <Target Name="BuildPackages">
+        <ItemGroup>
+            <MetaPackage Include="$(ProjectRoot)\Properties\GoogleMaps.LocationServices.All.nuspec" />
+        </ItemGroup>
+        <Exec Command="&quot;$(NuGetExePath)&quot; pack &quot;%(MetaPackage.Identity)&quot; -o &quot;$(ArtifactsDir)&quot; -p Version=$(Version) -exclude **\*.cs"
+              LogStandardErrorAsError="true" />
+    </Target>
+</Project>
