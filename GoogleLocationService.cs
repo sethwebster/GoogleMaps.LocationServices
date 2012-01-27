@@ -39,5 +39,71 @@ namespace GoogleMaps.Geolocation
             }
             return null;
         }
+
+
+        public Directions GetDirections(double Latitude, double Longitude)
+        {
+            return null;
+        }
+
+        public Directions GetDirections(AddressData fromAddress, AddressData toAddress)
+        {
+            
+            string googleUrlFormat = "http://maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
+            Directions direction = new Directions();
+
+            XDocument xdoc = XDocument.Load(String.Format(googleUrlFormat, fromAddress.ToString(), toAddress.ToString()));
+
+            var status = (from s in xdoc.Descendants("DirectionsResponse").Descendants("status")
+                          select s).FirstOrDefault();
+
+            if (status != null && status.Value == "OK")
+            {
+                direction.StatusCode = Directions.Status.OK;
+                var distance = (from d in xdoc.Descendants("DirectionsResponse").Descendants("route").Descendants("leg")
+                               .Descendants("distance").Descendants("text")
+                                select d).LastOrDefault();
+
+                if (distance != null)
+                {
+                    direction.Distance = distance.Value;
+                }
+
+                var duration = (from d in xdoc.Descendants("DirectionsResponse").Descendants("route").Descendants("leg")
+                               .Descendants("duration").Descendants("text")
+                                select d).LastOrDefault();
+
+                if (duration != null)
+                {
+                    direction.Duration = duration.Value;
+                }
+
+                var steps = from s in xdoc.Descendants("DirectionsResponse").Descendants("route").Descendants("leg").Descendants("step")
+                            select s;
+
+                foreach (var step in steps)
+                {
+                    Step directionStep = new Step();
+
+                    directionStep.Instruction = step.Element("html_instructions").Value;
+                    directionStep.Distance = step.Descendants("distance").First().Element("text").Value;
+                    direction.Steps.Add(directionStep);
+
+                }
+                return direction;
+            }
+            else if (status != null && status.Value != "OK")
+            {
+                direction.StatusCode = Directions.Status.FAILED;
+                return direction;
+            }
+            else
+            {
+                throw new Exception("Unable to get Directions from Google");
+            }
+
+        }
+
+
     }
 }
