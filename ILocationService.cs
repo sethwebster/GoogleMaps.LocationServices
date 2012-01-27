@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GoogleMaps.Geolocation
+namespace GoogleMaps.LocationServices
 {
     public interface ILocationService
     {
