@@ -14,6 +14,5 @@
   </metadata>
   <files>
     <file src="content\App_ReadMe\GoogleMaps.LocationServices.readme.txt" target="content\App_ReadMe\GoogleMaps.LocationServices.readme.txt" />
-    <file src="lib\GoogleMaps.Geolocation.dll" target="lib\GoogleMaps.Geolocation.dll" />
   </files>
 </package>
