@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 
-namespace GoogleMaps.Geolocation
+namespace GoogleMaps.LocationServices
 {
     public class Region
     {
