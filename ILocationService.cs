@@ -13,9 +13,9 @@ namespace GoogleMaps.LocationServices
         /// <param name="Latitude"></param>
         /// <param name="Longitude"></param>
         /// <returns></returns>
-        Region GetRegionFromLatLong(double Latitude, double Longitude);
-        MapPoint GetLatLongFromAddress(string Address);
-        Directions GetDirections(double Latitude, double Longitude);
+        Region GetRegionFromLatLong(double latitude, double longitude);
+        MapPoint GetLatLongFromAddress(string address);
+        Directions GetDirections(double latitude, double longitude);
         Directions GetDirections(AddressData fromAddress, AddressData toAddress);
 
     }
