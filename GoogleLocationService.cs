@@ -87,12 +87,12 @@ namespace GoogleMaps.LocationServices
         /// <summary>
         /// Translates a Latitude / Longitude into a Region (state) using Google Maps api
         /// </summary>
-        /// <param name="Latitude"></param>
-        /// <param name="Longitude"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         /// <returns></returns>
-        public Region GetRegionFromLatLong(double Latitude, double Longitude)
+        public Region GetRegionFromLatLong(double latitude, double longitude)
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, Latitude, Longitude));
+            XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
 
             var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("short_name").First().Value.Length == 2).FirstOrDefault();
             if (null != els)
@@ -108,9 +108,9 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns></returns>
-        public MapPoint GetLatLongFromAddress(string Address)
+        public MapPoint GetLatLongFromAddress(string address)
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Address));
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, address));
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").First();
             if (null != els)
             {
@@ -124,22 +124,35 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns></returns>
-        public MapPoint GetLatLongFromAddress(AddressData Address)
+        public MapPoint GetLatLongFromAddress(AddressData address)
         {
-            return GetLatLongFromAddress(Address.ToString());
+            return GetLatLongFromAddress(address.ToString());
         }
 
 
-        public Directions GetDirections(double Latitude, double Longitude)
+        /// <summary>
+        /// Gets the directions.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Directions GetDirections(double latitude, double longitude)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public Directions GetDirections(AddressData fromAddress, AddressData toAddress)
+        /// <summary>
+        /// Gets the directions.
+        /// </summary>
+        /// <param name="originAddress">From address.</param>
+        /// <param name="destinationAddress">To address.</param>
+        /// <returns>The directions</returns>
+        public Directions GetDirections(AddressData originAddress, AddressData destinationAddress)
         {
             Directions direction = new Directions();
 
-            XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections, fromAddress.ToString(), toAddress.ToString()));
+            XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections, originAddress.ToString(), destinationAddress.ToString()));
 
             var status = (from s in xdoc.Descendants("DirectionsResponse").Descendants("status")
                           select s).FirstOrDefault();
