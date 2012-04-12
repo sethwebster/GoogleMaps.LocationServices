@@ -8,6 +8,82 @@ namespace GoogleMaps.LocationServices
 {
     public class GoogleLocationService : ILocationService
     {
+        #region Constants
+        const string API_REGION_FROM_LATLONG = "maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}&sensor=false";
+        const string API_LATLONG_FROM_ADDRESS = "maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
+        const string API_DIRECTIONS = "maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
+        #endregion
+
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GoogleLocationService"/> class.
+        /// </summary>
+        /// <param name="useHttps">Indicates whether to call the Google API over HTTPS or not.</param>
+        public GoogleLocationService(bool useHttps)
+        {
+            UseHttps = useHttps;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GoogleLocationService"/> class. Default calling the API over regular
+        /// HTTP (not HTTPS).
+        /// </summary>
+        public GoogleLocationService()
+            : this(false)
+        { }
+        #endregion
+
+
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether to use the Google API over HTTPS.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if using the API over HTTPS; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseHttps { get; private set; }
+
+
+        private string UrlProtocolPrefix
+        {
+            get
+            {
+                if (UseHttps)
+                    return "https://";
+                else
+                    return "http://";
+            }
+        }
+
+
+        protected string APIUrlRegionFromLatLong
+        {
+            get
+            {
+                return UrlProtocolPrefix + API_REGION_FROM_LATLONG;
+            }
+        }
+
+        protected string APIUrlLatLongFromAddress
+        {
+            get
+            {
+                return UrlProtocolPrefix + API_LATLONG_FROM_ADDRESS;
+            }
+        }
+
+        protected string APIUrlDirections
+        {
+            get
+            {
+                return UrlProtocolPrefix + API_DIRECTIONS;
+            }
+        }
+        #endregion
+
+
+        #region Public instance methods
         /// <summary>
         /// Translates a Latitude / Longitude into a Region (state) using Google Maps api
         /// </summary>
@@ -16,8 +92,7 @@ namespace GoogleMaps.LocationServices
         /// <returns></returns>
         public Region GetRegionFromLatLong(double Latitude, double Longitude)
         {
-            string urlFormat = "http://maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}&sensor=false";
-            XDocument doc = XDocument.Load(string.Format(urlFormat, Latitude, Longitude));
+            XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, Latitude, Longitude));
 
             var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("short_name").First().Value.Length == 2).FirstOrDefault();
             if (null != els)
@@ -27,17 +102,31 @@ namespace GoogleMaps.LocationServices
             return null;
         }
 
+
+        /// <summary>
+        /// Gets the latitude and longitude that belongs to an address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
         public MapPoint GetLatLongFromAddress(string Address)
         {
-
-            string urlFormat = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
-            XDocument doc = XDocument.Load(string.Format(urlFormat, Address));
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Address));
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").First();
             if (null != els)
             {
                 return new MapPoint() { Latitude = Double.Parse((els.Nodes().First() as XElement).Value), Longitude = Double.Parse((els.Nodes().ElementAt(1) as XElement).Value) };
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets the latitude and longitude that belongs to an address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
+        public MapPoint GetLatLongFromAddress(AddressData Address)
+        {
+            return GetLatLongFromAddress(Address.ToString());
         }
 
 
@@ -48,11 +137,9 @@ namespace GoogleMaps.LocationServices
 
         public Directions GetDirections(AddressData fromAddress, AddressData toAddress)
         {
-            
-            string googleUrlFormat = "http://maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
             Directions direction = new Directions();
 
-            XDocument xdoc = XDocument.Load(String.Format(googleUrlFormat, fromAddress.ToString(), toAddress.ToString()));
+            XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections, fromAddress.ToString(), toAddress.ToString()));
 
             var status = (from s in xdoc.Descendants("DirectionsResponse").Descendants("status")
                           select s).FirstOrDefault();
@@ -103,7 +190,6 @@ namespace GoogleMaps.LocationServices
             }
 
         }
-
-
+        #endregion
     }
 }
