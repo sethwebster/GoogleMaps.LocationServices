@@ -94,7 +94,7 @@ namespace GoogleMaps.LocationServices
         {
             XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
 
-            var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("short_name").First().Value.Length == 2).FirstOrDefault();
+            var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("type").First().Value=="administrative_area_level_1").FirstOrDefault();
             if (null != els)
             {
                 return new Region() { Name = els.Descendants("long_name").First().Value, ShortCode = els.Descendants("short_name").First().Value };
