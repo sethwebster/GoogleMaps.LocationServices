@@ -17,12 +17,12 @@ namespace GoogleMaps.LocationServices
         public override string ToString()
         {
             return String.Format(
-                "{0},{1},{2} {3},{4}",
-                Address != null ? Address : "",
-                City != null ? City : "",
-                State != null ? State : "",
-                Zip != null ? Zip : "",
-                Country != null ? Country : "");
+                "{0}{1}{2}{3}{4}",
+                Address != null ? Address + ", " : "",
+                City != null ? City + ", " : "",
+                State != null ? State + ", " : "",
+                Zip != null ? Zip + ", " : "",
+                Country != null ? Country : "").TrimEnd(' ', ',');
         }
     }
 }

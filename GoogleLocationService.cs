@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -94,7 +95,7 @@ namespace GoogleMaps.LocationServices
         {
             XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
 
-            var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("type").First().Value=="administrative_area_level_1").FirstOrDefault();
+            var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("type").First().Value == "administrative_area_level_1").FirstOrDefault();
             if (null != els)
             {
                 return new Region() { Name = els.Descendants("long_name").First().Value, ShortCode = els.Descendants("short_name").First().Value };
@@ -114,7 +115,9 @@ namespace GoogleMaps.LocationServices
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").First();
             if (null != els)
             {
-                return new MapPoint() { Latitude = Double.Parse((els.Nodes().First() as XElement).Value), Longitude = Double.Parse((els.Nodes().ElementAt(1) as XElement).Value) };
+                var latitude =  ParseUS((els.Nodes().First() as XElement).Value);
+                var longitude =  ParseUS((els.Nodes().ElementAt(1) as XElement).Value);
+                return new MapPoint() { Latitude = latitude, Longitude = longitude };
             }
             return null;
         }
@@ -204,5 +207,10 @@ namespace GoogleMaps.LocationServices
 
         }
         #endregion
+
+        double ParseUS(string value)
+        {
+            return Double.Parse(value, new CultureInfo("en-US"));
+        }
     }
 }
