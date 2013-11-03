@@ -111,7 +111,7 @@ namespace GoogleMaps.LocationServices
         /// <returns></returns>
         public MapPoint GetLatLongFromAddress(string address)
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, address));
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").First();
             if (null != els)
             {
@@ -155,7 +155,9 @@ namespace GoogleMaps.LocationServices
         {
             Directions direction = new Directions();
 
-            XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections, originAddress.ToString(), destinationAddress.ToString()));
+            XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections,
+                Uri.EscapeDataString(originAddress.ToString()),
+                Uri.EscapeDataString(destinationAddress.ToString())));
 
             var status = (from s in xdoc.Descendants("DirectionsResponse").Descendants("status")
                           select s).FirstOrDefault();

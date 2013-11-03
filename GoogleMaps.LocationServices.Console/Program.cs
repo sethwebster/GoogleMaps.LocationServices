@@ -25,6 +25,12 @@ namespace GoogleMaps.LocationServices.Console
                     Address = "1600 Pennsylvania ave",
                     City = "Washington",
                     State = "DC"
+                },
+                new AddressData
+                {
+                    Address = "407 N Maple Dr. #1",
+                    City = "Beverly Hills",
+                    State = "CA"
                 }
             };
 
