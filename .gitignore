@@ -11,3 +11,4 @@ deploy/*
 packages/
 artifacts/
 msbuild.log
+*.sln.ide/

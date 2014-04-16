@@ -112,7 +112,7 @@ namespace GoogleMaps.LocationServices
         public MapPoint GetLatLongFromAddress(string address)
         {
             XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
-            var els = doc.Descendants("result").Descendants("geometry").Descendants("location").First();
+            var els = doc.Descendants("result").Descendants("geometry").Descendants("location").FirstOrDefault();
             if (null != els)
             {
                 var latitude =  ParseUS((els.Nodes().First() as XElement).Value);
