@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Xml.Linq;
 
@@ -109,9 +110,17 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns></returns>
+        /// <exception cref="System.Net.WebException"></exception>
         public MapPoint GetLatLongFromAddress(string address)
         {
             XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
+
+            string status = doc.Descendants("status").FirstOrDefault().Value;
+            if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
+            {
+                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
+            }
+
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").FirstOrDefault();
             if (null != els)
             {
