@@ -37,10 +37,18 @@ namespace GoogleMaps.LocationServices.Console
             var gls = new GoogleLocationService();
             foreach (var address in addresses)
             {
-                var latlong = gls.GetLatLongFromAddress(address);
-                var Latitude = latlong.Latitude;
-                var Longitude = latlong.Longitude;
-                System.Console.WriteLine("Address ({0}) is at {1},{2}", address, Latitude, Longitude);
+                try
+                {
+                    var latlong = gls.GetLatLongFromAddress(address);
+                    var Latitude = latlong.Latitude;
+                    var Longitude = latlong.Longitude;
+                    System.Console.WriteLine("Address ({0}) is at {1},{2}", address, Latitude, Longitude);
+                }
+                catch(System.Net.WebException ex)
+                {
+                    System.Console.WriteLine("Google Maps API Error {0}", ex.Message);
+                }
+                
             }
             System.Console.ReadLine();
         }
