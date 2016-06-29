@@ -40,9 +40,12 @@ namespace GoogleMaps.LocationServices.Console
                 try
                 {
                     var latlong = gls.GetLatLongFromAddress(address);
-                    var Latitude = latlong.Latitude;
-                    var Longitude = latlong.Longitude;
-                    System.Console.WriteLine("Address ({0}) is at {1},{2}", address, Latitude, Longitude);
+                    var latitude = latlong.Latitude;
+                    var longitude = latlong.Longitude;
+                    System.Console.WriteLine("Address ({0}) is at {1},{2}", address, latitude, longitude);
+                    var reversedAddress = gls.GetAddressFromLatLang(latitude, longitude);
+                    System.Console.WriteLine("Reversed Address from ({1},{2}) is {0}", reversedAddress, latitude, longitude);
+                    System.Console.WriteLine("=======================================");
                 }
                 catch(System.Net.WebException ex)
                 {
