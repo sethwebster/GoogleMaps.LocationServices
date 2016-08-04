@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Authentication;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace GoogleMaps.LocationServices
@@ -104,6 +105,95 @@ namespace GoogleMaps.LocationServices
             return null;
         }
 
+        /// <summary>
+        /// Translates a Latitude / Longitude into an address using Google Maps api
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        public AddressData GetAddressFromLatLang(double latitude, double longitude)
+        {
+            var addressShortName = "";
+            var addressCountry = "";
+            var addressAdministrativeAreaLevel1 = "";
+            var addressAdministrativeAreaLevel2 = "";
+            var addressAdministrativeAreaLevel3 = "";
+            var addressColloquialArea = "";
+            var addressLocality = "";
+            var addressSublocality = "";
+            var addressNeighborhood = "";
+            var addressRoute = "";
+            var addressStreetNumber = "";
+            var addressPostalCode = "";
+
+            XmlDocument doc = new XmlDocument();
+
+            doc.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
+            var element = doc.SelectSingleNode("//GeocodeResponse/status");
+            if (element == null || element.InnerText == "ZERO_RESULTS")
+            {
+                return null;
+            }
+
+            XmlNodeList xnList = doc.SelectNodes("//GeocodeResponse/result/address_component");
+
+            if (xnList == null) return null;
+
+            foreach (XmlNode xn in xnList)
+            {
+                var longname = xn["long_name"].InnerText;
+                var shortname = xn["short_name"].InnerText;
+                var typename = xn["type"].InnerText;
+
+                switch (typename)
+                {
+                    case "country":
+                        addressCountry = longname;
+                        addressShortName = shortname;
+                        break;
+                    case "locality":
+                        addressLocality = longname;
+                        break;
+                    case "sublocality":
+                        addressSublocality = longname;
+                        break;
+                    case "neighborhood":
+                        addressNeighborhood = longname;
+                        break;
+                    case "colloquial_area":
+                        addressColloquialArea = longname;
+                        break;
+                    case "administrative_area_level_1":
+                        addressAdministrativeAreaLevel1 = shortname;
+                        break;
+                    case "administrative_area_level_2":
+                        addressAdministrativeAreaLevel2 = longname;
+                        break;
+                    case "administrative_area_level_3":
+                        addressAdministrativeAreaLevel3 = longname;
+                        break;
+                    case "route":
+                        addressRoute = shortname;
+                        break;
+                    case "street_number":
+                        addressStreetNumber = shortname;
+                        break; 
+                    case "postal_code":
+                        addressPostalCode = longname;
+                        break;
+                }
+            }
+
+            return new AddressData
+            {
+                Country = addressCountry,
+                State = addressAdministrativeAreaLevel1,
+                City = addressLocality,
+                Address = addressStreetNumber + " " + addressRoute + " " + addressSublocality,
+                Zip = addressPostalCode,
+            };
+        }
+
 
         /// <summary>
         /// Gets the latitude and longitude that belongs to an address.
@@ -124,8 +214,8 @@ namespace GoogleMaps.LocationServices
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").FirstOrDefault();
             if (null != els)
             {
-                var latitude =  ParseUS((els.Nodes().First() as XElement).Value);
-                var longitude =  ParseUS((els.Nodes().ElementAt(1) as XElement).Value);
+                var latitude = ParseUS((els.Nodes().First() as XElement).Value);
+                var longitude = ParseUS((els.Nodes().ElementAt(1) as XElement).Value);
                 return new MapPoint() { Latitude = latitude, Longitude = longitude };
             }
             return null;
