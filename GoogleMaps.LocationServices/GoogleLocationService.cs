@@ -111,7 +111,7 @@ namespace GoogleMaps.LocationServices
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <returns></returns>
-        public AddressData GetAddressFromLatLang(double latitude, double longitude)
+        public AddressData GetAddressFromLatLang(double latitude, double longitude, string apikey = "")
         {
             var addressShortName = "";
             var addressCountry = "";
@@ -126,6 +126,8 @@ namespace GoogleMaps.LocationServices
             var addressStreetNumber = "";
             var addressPostalCode = "";
 
+            if (apikey != "")
+                UseHttps = true;
             XmlDocument doc = new XmlDocument();
 
             doc.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
@@ -201,14 +203,15 @@ namespace GoogleMaps.LocationServices
         /// <param name="address">The address.</param>
         /// <returns></returns>
         /// <exception cref="System.Net.WebException"></exception>
-        public MapPoint GetLatLongFromAddress(string address)
+        public MapPoint GetLatLongFromAddress(string address, string apikey = "")
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
-
+            if (apikey != "")
+                UseHttps = true;
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + apikey);
             string status = doc.Descendants("status").FirstOrDefault().Value;
             if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
             {
-                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
+                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit or API Key is invalid");
             }
 
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").FirstOrDefault();
@@ -226,9 +229,9 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns></returns>
-        public MapPoint GetLatLongFromAddress(AddressData address)
+        public MapPoint GetLatLongFromAddress(AddressData address, string apikey = "")
         {
-            return GetLatLongFromAddress(address.ToString());
+            return GetLatLongFromAddress(address.ToString(), apikey);
         }
 
 
