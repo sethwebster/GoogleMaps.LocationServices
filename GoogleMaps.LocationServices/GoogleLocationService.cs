@@ -111,7 +111,7 @@ namespace GoogleMaps.LocationServices
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <returns></returns>
-        public AddressData GetAddressFromLatLang(double latitude, double longitude, string apikey)
+        public AddressData GetAddressFromLatLang(double latitude, double longitude, string apikey = "")
         {
             var addressShortName = "";
             var addressCountry = "";
@@ -203,7 +203,7 @@ namespace GoogleMaps.LocationServices
         /// <param name="address">The address.</param>
         /// <returns></returns>
         /// <exception cref="System.Net.WebException"></exception>
-        public MapPoint GetLatLongFromAddress(string address, string apikey)
+        public MapPoint GetLatLongFromAddress(string address, string apikey = "")
         {
             if (apikey != "")
                 UseHttps = true;
@@ -229,7 +229,7 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns></returns>
-        public MapPoint GetLatLongFromAddress(AddressData address, string apikey)
+        public MapPoint GetLatLongFromAddress(AddressData address, string apikey = "")
         {
             return GetLatLongFromAddress(address.ToString(), apikey);
         }
