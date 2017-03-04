@@ -20,8 +20,9 @@ namespace GoogleMaps.LocationServices
         /// Gets the latitude and longitude that belongs to an address.
         /// </summary>
         /// <param name="address">The address.</param>
+        /// <param name="apikey">optional API key</param>
         /// <returns></returns>
-        MapPoint GetLatLongFromAddress(string address);
+        MapPoint GetLatLongFromAddress(string address, string apikey);
 
 
         /// <summary>
