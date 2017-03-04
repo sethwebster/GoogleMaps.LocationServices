@@ -10,6 +10,7 @@ namespace GoogleMaps.LocationServices.Console
     {
         public static void Main(string[] args)
         {
+            string apikey = "";
             AddressData[] addresses = new AddressData[] 
             {
                 new AddressData // Belgium
@@ -39,11 +40,11 @@ namespace GoogleMaps.LocationServices.Console
             {
                 try
                 {
-                    var latlong = gls.GetLatLongFromAddress(address);
+                    var latlong = gls.GetLatLongFromAddress(address,apikey);
                     var latitude = latlong.Latitude;
                     var longitude = latlong.Longitude;
                     System.Console.WriteLine("Address ({0}) is at {1},{2}", address, latitude, longitude);
-                    var reversedAddress = gls.GetAddressFromLatLang(latitude, longitude);
+                    var reversedAddress = gls.GetAddressFromLatLang(latitude, longitude,apikey);
                     System.Console.WriteLine("Reversed Address from ({1},{2}) is {0}", reversedAddress, latitude, longitude);
                     System.Console.WriteLine("=======================================");
                 }
