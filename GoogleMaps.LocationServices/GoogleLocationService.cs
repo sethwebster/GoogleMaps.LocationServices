@@ -231,6 +231,40 @@ namespace GoogleMaps.LocationServices
             return GetLatLongFromAddress(address.ToString());
         }
 
+        /// <summary>
+        /// Gets an array of string addresses that matched a possibly ambiguous address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Net.WebException"></exception>
+        public string[] GetAddressesListFromAddress(string address)
+        {
+
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
+            var status = doc.Descendants("status").FirstOrDefault().Value;
+
+            if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
+            {
+                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
+            }
+
+            var results = doc.Descendants("result").Descendants("formatted_address").ToArray();
+            var addresses = (from elem in results select elem.Value).ToArray();
+            if (addresses.Length > 0) return addresses;
+            return null;
+        }
+
+        /// <summary>
+        /// Gets an array of string addresses that matched a possibly ambiguous address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Net.WebException"></exception>
+        public string[] GetAddressesListFromAddress(AddressData address)
+        {
+            return GetAddressesListFromAddress(address.ToString());
+        }
+
 
         /// <summary>
         /// Gets the directions.
