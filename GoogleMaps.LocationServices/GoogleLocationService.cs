@@ -25,6 +25,7 @@ namespace GoogleMaps.LocationServices
         /// <param name="useHttps">Indicates whether to call the Google API over HTTPS or not.</param>
         public GoogleLocationService(bool useHttps)
         {
+            APIKey = "";
             UseHttps = useHttps;
         }
 
@@ -34,7 +35,15 @@ namespace GoogleMaps.LocationServices
         /// </summary>
         public GoogleLocationService()
             : this(false)
-        { }
+        {
+            APIKey = "";
+        }
+
+        public GoogleLocationService(string apikey)
+        {
+            APIKey = apikey;
+            UseHttps = true;
+        }
         #endregion
 
 
@@ -47,6 +56,8 @@ namespace GoogleMaps.LocationServices
         /// </value>
         public bool UseHttps { get; private set; }
 
+
+        private string APIKey { get; set; }
 
         private string UrlProtocolPrefix
         {
@@ -92,7 +103,7 @@ namespace GoogleMaps.LocationServices
         /// <returns></returns>
         public Region GetRegionFromLatLong(double latitude, double longitude)
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
+            XDocument doc = XDocument.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude) + "&key=" + APIKey);
 
             var els = doc.Descendants("result").First().Descendants("address_component").Where(s => s.Descendants("type").First().Value == "administrative_area_level_1").FirstOrDefault();
             if (null != els)
@@ -201,7 +212,7 @@ namespace GoogleMaps.LocationServices
         /// <exception cref="System.Net.WebException"></exception>
         public MapPoint GetLatLongFromAddress(string address)
         {
-            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
 
             string status = doc.Descendants("status").FirstOrDefault().Value;
             if (status == Constants.ApiResponses.OverQueryLimit|| status == Constants.ApiResponses.RequestDenied)
@@ -238,7 +249,7 @@ namespace GoogleMaps.LocationServices
         public string[] GetAddressesListFromAddress(string address)
         {
 
-            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
+            XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
             var status = doc.Descendants("status").FirstOrDefault().Value;
 
             if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
@@ -288,7 +299,7 @@ namespace GoogleMaps.LocationServices
 
             XDocument xdoc = XDocument.Load(String.Format(APIUrlDirections,
                 Uri.EscapeDataString(originAddress.ToString()),
-                Uri.EscapeDataString(destinationAddress.ToString())));
+                Uri.EscapeDataString(destinationAddress.ToString())) + "&key=" + APIKey);
 
             var status = (from s in xdoc.Descendants("DirectionsResponse").Descendants("status")
                           select s).FirstOrDefault();
