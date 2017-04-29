@@ -52,10 +52,7 @@ namespace GoogleMaps.LocationServices
         {
             get
             {
-                if (UseHttps)
-                    return "https://";
-                else
-                    return "http://";
+                return UseHttps ? "https://" : "http://";
             }
         }
 
@@ -113,24 +110,24 @@ namespace GoogleMaps.LocationServices
         /// <returns></returns>
         public AddressData GetAddressFromLatLang(double latitude, double longitude)
         {
-            var addressShortName = "";
-            var addressCountry = "";
-            var addressAdministrativeAreaLevel1 = "";
-            var addressAdministrativeAreaLevel2 = "";
-            var addressAdministrativeAreaLevel3 = "";
-            var addressColloquialArea = "";
-            var addressLocality = "";
-            var addressSublocality = "";
-            var addressNeighborhood = "";
-            var addressRoute = "";
-            var addressStreetNumber = "";
-            var addressPostalCode = "";
+            var addressShortName = string.Empty;
+            var addressCountry = string.Empty;
+            var addressAdministrativeAreaLevel1 = string.Empty;
+            var addressAdministrativeAreaLevel2 = string.Empty;
+            var addressAdministrativeAreaLevel3 = string.Empty;
+            var addressColloquialArea = string.Empty;
+            var addressLocality = string.Empty;
+            var addressSublocality = string.Empty;
+            var addressNeighborhood = string.Empty;
+            var addressRoute = string.Empty;
+            var addressStreetNumber = string.Empty;
+            var addressPostalCode = string.Empty;
 
             XmlDocument doc = new XmlDocument();
 
             doc.Load(string.Format(APIUrlRegionFromLatLong, latitude, longitude));
             var element = doc.SelectSingleNode("//GeocodeResponse/status");
-            if (element == null || element.InnerText == "ZERO_RESULTS")
+            if (element == null || element.InnerText == Constants.ApiResponses.ZeroResults)
             {
                 return null;
             }
@@ -183,7 +180,7 @@ namespace GoogleMaps.LocationServices
                         break;
                 }
             }
-
+            
             return new AddressData
             {
                 Country = addressCountry,
@@ -193,6 +190,7 @@ namespace GoogleMaps.LocationServices
                 Zip = addressPostalCode,
             };
         }
+        
 
 
         /// <summary>
@@ -206,7 +204,7 @@ namespace GoogleMaps.LocationServices
             XDocument doc = XDocument.Load(string.Format(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
 
             string status = doc.Descendants("status").FirstOrDefault().Value;
-            if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
+            if (status == Constants.ApiResponses.OverQueryLimit|| status == Constants.ApiResponses.RequestDenied)
             {
                 throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
             }

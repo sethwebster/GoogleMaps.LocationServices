@@ -22,6 +22,8 @@ That Lat/Long is in Washington (WA) state
 
 Revision History
 ================
+1.2.0.0
+Adds GetAddressListFromAddress and reverse lookup of address from Lat/Long
 0.9.1 
 Update project as standalone project
 Fixed code sample above

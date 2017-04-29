@@ -40,6 +40,7 @@ namespace GoogleMaps.LocationServices.Console
                 try
                 {
                     var latlong = gls.GetLatLongFromAddress(address);
+                    if (latlong == null) continue;
                     var latitude = latlong.Latitude;
                     var longitude = latlong.Longitude;
                     System.Console.WriteLine("Address ({0}) is at {1},{2}", address, latitude, longitude);

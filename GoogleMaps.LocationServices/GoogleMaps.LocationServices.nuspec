@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.9.8.6</version>
-    <authors>Seth Webster,Islam Abusida</authors>
+    <version>1.2.0.0</version>
+    <authors>Seth Webster</authors>
     <owners>Seth Webster,Islam Abusida</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>https://github.com/sethwebster/GoogleMaps.LocationServices</projectUrl>
@@ -13,6 +13,6 @@
     <summary>A simple library for performing the a reverse geolocation lookups via Google Maps.  This currently allows you to translate latitude / longitude to a region (state) and an address to a map point.</summary>
     <releaseNotes>Incorporates latest contributions including rate limit handling</releaseNotes>
     <copyright>Copyright Seth Webster 2013</copyright>
-    <tags>Maps</tags>
+    <tags>Maps,Google,GeoTagging,GeoLocation</tags>
   </metadata>
 </package>
