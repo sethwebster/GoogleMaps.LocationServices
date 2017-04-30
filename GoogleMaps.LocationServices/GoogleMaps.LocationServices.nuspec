@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>1.2.0.0</version>
+    <version>1.2.0.1</version>
     <authors>Seth Webster</authors>
     <owners>Seth Webster,Islam Abusida</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A simple library for performing the a reverse geolocation lookups via Google Maps.  This currently allows you to translate latitude / longitude to a region (state) and an address to a map point.</description>
     <summary>A simple library for performing the a reverse geolocation lookups via Google Maps.  This currently allows you to translate latitude / longitude to a region (state) and an address to a map point.</summary>
-    <releaseNotes>Incorporates latest contributions including rate limit handling</releaseNotes>
+    <releaseNotes>Adds more request methods and ability to set an ApiKey</releaseNotes>
     <copyright>Copyright Seth Webster 2013</copyright>
     <tags>Maps,Google,GeoTagging,GeoLocation</tags>
   </metadata>

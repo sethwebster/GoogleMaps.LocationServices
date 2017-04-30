@@ -12,9 +12,6 @@ namespace GoogleMaps.LocationServices
     public class GoogleLocationService : ILocationService
     {
         #region Constants
-        const string API_REGION_FROM_LATLONG = "maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}&sensor=false";
-        const string API_LATLONG_FROM_ADDRESS = "maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
-        const string API_DIRECTIONS = "maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
         #endregion
 
 
@@ -72,7 +69,7 @@ namespace GoogleMaps.LocationServices
         {
             get
             {
-                return UrlProtocolPrefix + API_REGION_FROM_LATLONG;
+                return UrlProtocolPrefix + Constants.ApiUriTemplates.ApiRegionFromLatLong ;
             }
         }
 
@@ -80,7 +77,7 @@ namespace GoogleMaps.LocationServices
         {
             get
             {
-                return UrlProtocolPrefix + API_LATLONG_FROM_ADDRESS;
+                return UrlProtocolPrefix + Constants.ApiUriTemplates.ApiLatLongFromAddress;
             }
         }
 
@@ -88,7 +85,7 @@ namespace GoogleMaps.LocationServices
         {
             get
             {
-                return UrlProtocolPrefix + API_DIRECTIONS;
+                return UrlProtocolPrefix + Constants.ApiUriTemplates.ApiDirections;
             }
         }
         #endregion
