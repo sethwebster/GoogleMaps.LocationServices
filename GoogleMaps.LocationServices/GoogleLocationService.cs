@@ -148,7 +148,7 @@ namespace GoogleMaps.LocationServices
             {
                 var longname = xn["long_name"].InnerText;
                 var shortname = xn["short_name"].InnerText;
-                var typename = xn["type"].InnerText;
+                var typename = xn["type"]?.InnerText;
 
                 switch (typename)
                 {
