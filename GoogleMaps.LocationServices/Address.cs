@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -17,6 +18,7 @@ namespace GoogleMaps.LocationServices
         public override string ToString()
         {
             return String.Format(
+                CultureInfo.InvariantCulture,
                 "{0}{1}{2}{3}{4}",
                 Address != null ? Address + ", " : "",
                 City != null ? City + ", " : "",
