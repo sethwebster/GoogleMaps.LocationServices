@@ -34,25 +34,26 @@ namespace GoogleMaps.LocationServices.Console
                 }
             };
 
-            var gls = new GoogleLocationService();
-            foreach (var address in addresses)
+            var gls = new GoogleLocationService("AIzaSyAzXXP9EpudRef0ac4ggTt4tmhFQ_8fsc4");
+            var results = addresses.Select(a =>
             {
-                try
+                var latlong = gls.GetLatLongFromAddress(a);
+                if (latlong == null) return new {Success = false, Forward = a.ToString(), Reverse = "" };
+                var latitude = latlong.Latitude;
+                var longitude = latlong.Longitude;
+                var reversedAddress = gls.GetAddressFromLatLang(latlong.Latitude, latlong.Longitude);
+                return new
                 {
-                    var latlong = gls.GetLatLongFromAddress(address);
-                    if (latlong == null) continue;
-                    var latitude = latlong.Latitude;
-                    var longitude = latlong.Longitude;
-                    System.Console.WriteLine("Address ({0}) is at {1},{2}", address, latitude, longitude);
-                    var reversedAddress = gls.GetAddressFromLatLang(latitude, longitude);
-                    System.Console.WriteLine("Reversed Address from ({1},{2}) is {0}", reversedAddress, latitude, longitude);
-                    System.Console.WriteLine("=======================================");
-                }
-                catch(System.Net.WebException ex)
-                {
-                    System.Console.WriteLine("Google Maps API Error {0}", ex.Message);
-                }
-                
+                    Success = true,
+                    Forward = $"Address {a} is at {latlong.Latitude}, {latlong.Longitude}",
+                    Reverse = $"Reversed Address {reversedAddress} from {latlong.Latitude}, {latlong.Longitude}",
+                };
+            });
+            foreach (var result in results)
+            {
+                if (result == null) continue;
+                System.Console.WriteLine($"{result.Success}: {result.Forward}");
+                System.Console.WriteLine($"{result.Success}: {result.Reverse}");
             }
             System.Console.ReadLine();
         }

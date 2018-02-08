@@ -133,7 +133,7 @@ namespace GoogleMaps.LocationServices
 
             XmlDocument doc = new XmlDocument();
 
-            doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude));
+            doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key="+APIKey);
             var element = doc.SelectSingleNode("//GeocodeResponse/status");
             if (element == null || element.InnerText == Constants.ApiResponses.ZeroResults)
             {

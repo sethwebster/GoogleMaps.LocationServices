@@ -12,3 +12,5 @@ packages/
 artifacts/
 msbuild.log
 *.sln.ide/
+.idea/
+.idea/*
