@@ -5,10 +5,16 @@ A simple library for Google Maps geolocation and reverse geolocation.
 
 The easiest way to get hold of it is to install the [Nuget package](http://nuget.org/List/Packages/GoogleMaps.LocationServices).
 
+From the package manager console:
+`PM> Install-Package GoogleMaps.LocationServices` 
+
 Example Lookup
 ----------------------
 
-<pre>
+```C#
+using GoogleMaps.LocationServices;
+.....
+
 AddressData[] addresses = new AddressData[] 
 {
     new AddressData // Belgium
@@ -33,7 +39,15 @@ AddressData[] addresses = new AddressData[]
     }
 };
 
+// Constructor has 3 overload
+// No parameters. It does not use API Key
 var gls = new GoogleLocationService();
+
+// Boolean parameter to force the requests to use https 
+// var gls = new GoogleLocationService(useHttps: true);
+
+// String paremeter that provides the google map api key
+// var gls = new GoogleLocationService(apikey: "YOUR API KEY");
 foreach (var address in addresses)
 {
     try
@@ -49,4 +63,4 @@ foreach (var address in addresses)
     }
                 
 }
-</pre>
+```
