@@ -14,3 +14,4 @@ msbuild.log
 *.sln.ide/
 .idea/
 .idea/*
+*.vs/
