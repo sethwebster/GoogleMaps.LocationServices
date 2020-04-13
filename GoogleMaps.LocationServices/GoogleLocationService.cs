@@ -212,9 +212,14 @@ namespace GoogleMaps.LocationServices
             XDocument doc = XDocument.Load(string.Format(CultureInfo.InvariantCulture, APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
 
             string status = doc.Descendants("status").FirstOrDefault().Value;
-            if (status == Constants.ApiResponses.OverQueryLimit|| status == Constants.ApiResponses.RequestDenied)
+            if (status == Constants.ApiResponses.OverQueryLimit)
             {
-                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
+                throw new System.Net.WebException("QueryLimit exceeded, check your dashboard");
+            }
+
+            if (status == Constants.ApiResponses.RequestDenied)
+            {
+                throw new System.Net.WebException("Request denied, it's likely you need to enable the necessary Google maps APIs");
             }
 
             var els = doc.Descendants("result").Descendants("geometry").Descendants("location").FirstOrDefault();
@@ -249,9 +254,14 @@ namespace GoogleMaps.LocationServices
             XDocument doc = XDocument.Load(string.Format(CultureInfo.InvariantCulture, APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
             var status = doc.Descendants("status").FirstOrDefault().Value;
 
-            if (status == "OVER_QUERY_LIMIT" || status == "REQUEST_DENIED")
+            if (status == Constants.ApiResponses.OverQueryLimit)
             {
-                throw new System.Net.WebException("Request Not Authorized or Over QueryLimit");
+                throw new System.Net.WebException("QueryLimit exceeded, check your dashboard");
+            }
+
+            if (status == Constants.ApiResponses.RequestDenied)
+            {
+                throw new System.Net.WebException("Request denied, it's likely you need to enable the necessary Google maps APIs");
             }
 
             var results = doc.Descendants("result").Descendants("formatted_address").ToArray();
