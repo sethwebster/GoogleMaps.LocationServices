@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.0.4</Version>
+    <Version>1.2.0.5</Version>
     <Authors>Seth Webster</Authors>
     <Description>A simple library for performing reverse geolocation lookups via Google Maps.  This currently allows you to translate latitude / longitude to a region (state) and an address to a map point.</Description>
     <Copyright>Seth Webster 2013-Present</Copyright>
@@ -14,6 +14,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReleaseNotes>Just automating builds.</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
