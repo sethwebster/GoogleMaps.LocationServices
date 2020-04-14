@@ -69,7 +69,7 @@ namespace GoogleMaps.LocationServices
         {
             get
             {
-                return UrlProtocolPrefix + Constants.ApiUriTemplates.ApiRegionFromLatLong ;
+                return UrlProtocolPrefix + Constants.ApiUriTemplates.ApiRegionFromLatLong;
             }
         }
 
@@ -133,7 +133,7 @@ namespace GoogleMaps.LocationServices
 
             XmlDocument doc = new XmlDocument();
 
-            doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key="+APIKey);
+            doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key=" + APIKey);
             var element = doc.SelectSingleNode("//GeocodeResponse/status");
             if (element == null || element.InnerText == Constants.ApiResponses.ZeroResults)
             {
@@ -182,13 +182,13 @@ namespace GoogleMaps.LocationServices
                         break;
                     case "street_number":
                         addressStreetNumber = shortname;
-                        break; 
+                        break;
                     case "postal_code":
                         addressPostalCode = longname;
                         break;
                 }
             }
-            
+
             return new AddressData
             {
                 Country = addressCountry,
@@ -198,7 +198,7 @@ namespace GoogleMaps.LocationServices
                 Zip = addressPostalCode,
             };
         }
-        
+
 
 
         /// <summary>

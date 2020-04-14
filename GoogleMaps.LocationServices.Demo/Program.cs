@@ -10,8 +10,13 @@ namespace GoogleMaps.LocationServices.Console
     {
         public static void Main(string[] args)
         {
-            AddressData[] addresses = new AddressData[] 
+            AddressData[] addresses = new AddressData[]
             {
+                // Resolve from post code only
+                new AddressData {
+                    Zip = "10025"
+                },
+                // Non-US
                 new AddressData // Belgium
                 {
                     Address = "Rue du Cornet 6",
@@ -34,11 +39,13 @@ namespace GoogleMaps.LocationServices.Console
                 }
             };
 
-            var gls = new GoogleLocationService("AIzaSyAzXXP9EpudRef0ac4ggTt4tmhFQ_8fsc4");
-            var results = addresses.Select(a =>
+            // You'll need to acquire your own Google Maps api key (Geolocation API)
+            // https://developers.google.com/maps/documentation/javascript/get-api-key
+            var gls = new GoogleLocationService("AIzaSyBKZp9cuEthSeBVTg51R2VYdebIyPIQwv8");
+            var results = addresses.AsParallel().Select(a =>
             {
                 var latlong = gls.GetLatLongFromAddress(a);
-                if (latlong == null) return new {Success = false, Forward = a.ToString(), Reverse = "" };
+                if (latlong == null) return new { Success = false, Forward = a.ToString(), Reverse = "" };
                 var latitude = latlong.Latitude;
                 var longitude = latlong.Longitude;
                 var reversedAddress = gls.GetAddressFromLatLang(latlong.Latitude, latlong.Longitude);
