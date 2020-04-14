@@ -27,4 +27,4 @@ jobs:
       uses: rohith/publish-nuget@v2
       with: 
         PROJECT_FILE_PATH: ./GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj
-        NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
+        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
