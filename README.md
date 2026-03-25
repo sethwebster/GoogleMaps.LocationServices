@@ -1,21 +1,27 @@
 GoogleMaps.LocationServices
 =======================================
 
-A simple library for Google Maps geolocation and reverse geolocation.
+A simple library for Google Maps geolocation and reverse geolocation built with modern
+SDK-style .NET tooling.
 
-The easiest way to get hold of it is to install the [Nuget package](http://nuget.org/List/Packages/GoogleMaps.LocationServices).
+Install from NuGet:
 
-From the package manager console:
-`PM> Install-Package GoogleMaps.LocationServices` 
+```text
+PM> Install-Package GoogleMaps.LocationServices
+```
+
+Supported targets:
+
+- `.NET Standard 2.0`
+- `.NET 8.0`
 
 Example Lookup
 ----------------------
 
 ```C#
 using GoogleMaps.LocationServices;
-.....
 
-AddressData[] addresses = new AddressData[] 
+AddressData[] addresses = new[]
 {
     new AddressData // Belgium
     {
@@ -39,28 +45,27 @@ AddressData[] addresses = new AddressData[]
     }
 };
 
-// Constructor has 3 overload
-// No parameters. It does not use API Key
-var gls = new GoogleLocationService();
+// No API key constructor still works (legacy use).
+var legacyClient = new GoogleLocationService();
 
-// Boolean parameter to force the requests to use https 
-// var gls = new GoogleLocationService(useHttps: true);
+// Preferred: pass your Google Maps API key for reliability.
+var client = new GoogleLocationService("YOUR_API_KEY");
 
-// String paremeter that provides the google map api key
-// var gls = new GoogleLocationService(apikey: "YOUR API KEY");
 foreach (var address in addresses)
 {
     try
     {
-        var latlong = gls.GetLatLongFromAddress(address);
-        var Latitude = latlong.Latitude;
-        var Longitude = latlong.Longitude;
-        System.Console.WriteLine("Address ({0}) is at {1},{2}", address, Latitude, Longitude);
+        var latlong = client.GetLatLongFromAddress(address);
+        if (latlong == null) continue;
+
+        var latitude = latlong.Latitude;
+        var longitude = latlong.Longitude;
+
+        System.Console.WriteLine($"Address ({address}) is at {latitude},{longitude}");
     }
-    catch(System.Net.WebException ex)
+    catch (System.Net.WebException ex)
     {
-        System.Console.WriteLine("Google Maps API Error {0}", ex.Message);
+        System.Console.WriteLine($"Google Maps API Error: {ex.Message}");
     }
-                
 }
 ```

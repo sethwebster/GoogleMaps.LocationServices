@@ -1,22 +1,25 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace GoogleMaps.LocationServices
+namespace GoogleMaps.LocationServices;
+
+public class Directions
 {
-    public class Directions
+    public enum Status
     {
-        public enum Status
-        {
-            OK,
-            FAILED
-        }
-        public Directions()
-        {
-            Steps = new List<Step>();
-        }
-        public List<Step> Steps { get; set; }
-        public string Duration { get; set; }
-        public string Distance { get; set; }
-
-        public Status StatusCode { get; set; }
+        OK,
+        FAILED
     }
+
+    public Directions()
+    {
+        Steps = new List<Step>();
+    }
+
+    public List<Step> Steps { get; set; }
+
+    public string? Duration { get; set; }
+
+    public string? Distance { get; set; }
+
+    public Status StatusCode { get; set; }
 }

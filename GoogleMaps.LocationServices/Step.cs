@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace GoogleMaps.LocationServices;
 
-namespace GoogleMaps.LocationServices
+public class Step
 {
-    public class Step
-    {
-        public string Instruction { get; set; }
+    public string? Instruction { get; set; }
 
-        public string Distance { get; set; }
-    }
+    public string? Distance { get; set; }
 }

@@ -1,4 +1,3 @@
-﻿
 namespace GoogleMaps.LocationServices
 {
     public static class Constants
@@ -12,10 +11,9 @@ namespace GoogleMaps.LocationServices
 
         public static class ApiUriTemplates
         {
-            public const string ApiRegionFromLatLong = "maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}&sensor=false";
-            public const string ApiLatLongFromAddress = "maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
-            public const string ApiDirections = "maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}&sensor=false";
-
+            public const string ApiRegionFromLatLong = "maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}";
+            public const string ApiLatLongFromAddress = "maps.googleapis.com/maps/api/geocode/xml?address={0}";
+            public const string ApiDirections = "maps.googleapis.com/maps/api/directions/xml?origin={0}&destination={1}";
         }
     }
 }

@@ -1,30 +1,36 @@
-name: .NET Core
+name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
-    - name: Publish to Nuget
-      uses: rohith/publish-nuget@v2
-      with: 
-        PROJECT_FILE_PATH: ./GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack
+        run: dotnet pack GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj --configuration Release --no-restore --output nupkgs
+
+      - name: Publish to NuGet
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: ./GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
