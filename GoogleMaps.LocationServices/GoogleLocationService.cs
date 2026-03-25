@@ -55,13 +55,33 @@ public class GoogleLocationService : ILocationService
     protected string APIUrlDirections => UrlProtocolPrefix + Constants.ApiUriTemplates.ApiDirections;
     #endregion
 
+    #region Protected helpers
+    protected virtual XDocument LoadXDocumentFromUrl(string requestUrl)
+    {
+        return XDocument.Load(requestUrl);
+    }
+
+    protected virtual XmlDocument LoadXmlDocumentFromUrl(string requestUrl)
+    {
+        var doc = new XmlDocument();
+        doc.Load(requestUrl);
+        return doc;
+    }
+
+    protected string BuildRequestUrl(string template, params object[] parameters)
+    {
+        var rawUrl = string.Format(CultureInfo.InvariantCulture, template, parameters);
+        return rawUrl + "&key=" + APIKey;
+    }
+    #endregion
+
     #region Public instance methods
     /// <summary>
     /// Translates a Latitude / Longitude into a Region (state) using Google Maps api
     /// </summary>
     public Region? GetRegionFromLatLong(double latitude, double longitude)
     {
-        var doc = XDocument.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key=" + APIKey);
+        var doc = LoadXDocumentFromUrl(BuildRequestUrl(APIUrlRegionFromLatLong, latitude, longitude));
 
         var administrativeArea = doc
             .Descendants("result")
@@ -93,9 +113,7 @@ public class GoogleLocationService : ILocationService
         var addressStreetNumber = string.Empty;
         var addressPostalCode = string.Empty;
 
-        var doc = new XmlDocument();
-
-        doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key=" + APIKey);
+        var doc = LoadXmlDocumentFromUrl(BuildRequestUrl(APIUrlRegionFromLatLong, latitude, longitude));
 
         var status = doc.SelectSingleNode("//GeocodeResponse/status");
         if (status == null || status.InnerText == Constants.ApiResponses.ZeroResults)
@@ -151,15 +169,13 @@ public class GoogleLocationService : ILocationService
         };
     }
 
-
-
     /// <summary>
     /// Gets the latitude and longitude that belongs to an address.
     /// </summary>
     /// <param name="address">The address.</param>
     public MapPoint? GetLatLongFromAddress(string address)
     {
-        var doc = XDocument.Load(string.Format(CultureInfo.InvariantCulture, APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
+        var doc = LoadXDocumentFromUrl(BuildRequestUrl(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
 
         string status = doc.Descendants("status").FirstOrDefault()?.Value ?? string.Empty;
         if (status == Constants.ApiResponses.OverQueryLimit)
@@ -202,7 +218,7 @@ public class GoogleLocationService : ILocationService
     /// <returns></returns>
     public string[]? GetAddressesListFromAddress(string address)
     {
-        var doc = XDocument.Load(string.Format(CultureInfo.InvariantCulture, APIUrlLatLongFromAddress, Uri.EscapeDataString(address)) + "&key=" + APIKey);
+        var doc = LoadXDocumentFromUrl(BuildRequestUrl(APIUrlLatLongFromAddress, Uri.EscapeDataString(address)));
         var status = doc.Descendants("status").FirstOrDefault()?.Value;
 
         if (status == Constants.ApiResponses.OverQueryLimit)
@@ -250,10 +266,9 @@ public class GoogleLocationService : ILocationService
     {
         var direction = new Directions();
 
-        var xdoc = XDocument.Load(string.Format(CultureInfo.InvariantCulture,
-            APIUrlDirections,
+        var xdoc = LoadXDocumentFromUrl(BuildRequestUrl(APIUrlDirections,
             Uri.EscapeDataString(originAddress.ToString()),
-            Uri.EscapeDataString(destinationAddress.ToString())) + "&key=" + APIKey);
+            Uri.EscapeDataString(destinationAddress.ToString())));
 
         var status = xdoc.Descendants("DirectionsResponse").Descendants("status").FirstOrDefault();
 
@@ -264,17 +279,17 @@ public class GoogleLocationService : ILocationService
                 .Descendants("DirectionsResponse")
                 .Descendants("route")
                 .Descendants("leg")
-                .Descendants("distance")
-                .Descendants("text")
-                .LastOrDefault()?.Value;
+                .Elements("distance")
+                .Elements("text")
+                .FirstOrDefault()?.Value;
 
             direction.Duration = xdoc
                 .Descendants("DirectionsResponse")
                 .Descendants("route")
                 .Descendants("leg")
-                .Descendants("duration")
-                .Descendants("text")
-                .LastOrDefault()?.Value;
+                .Elements("duration")
+                .Elements("text")
+                .FirstOrDefault()?.Value;
 
             var steps = xdoc
                 .Descendants("DirectionsResponse")
