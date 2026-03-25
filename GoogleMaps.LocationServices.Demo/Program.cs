@@ -19,7 +19,7 @@ public static class Program
             {
                 Address = "Rue du Cornet 6",
                 City = "VERVIERS",
-                State = null,
+                State = string.Empty,
                 Country = "Belgium",
                 Zip = "B-4800",
             },
@@ -61,10 +61,10 @@ public static class Program
         foreach (var result in results)
         {
             if (result == null) continue;
-            Console.WriteLine($"{result.Success}: {result.Forward}");
-            Console.WriteLine($"{result.Success}: {result.Reverse}");
+            System.Console.WriteLine($"{result.Success}: {result.Forward}");
+            System.Console.WriteLine($"{result.Success}: {result.Reverse}");
         }
 
-        Console.ReadLine();
+        System.Console.ReadLine();
     }
 }

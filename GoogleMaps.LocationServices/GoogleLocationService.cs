@@ -93,7 +93,7 @@ public class GoogleLocationService : ILocationService
         var addressStreetNumber = string.Empty;
         var addressPostalCode = string.Empty;
 
-        using var doc = new XmlDocument();
+        var doc = new XmlDocument();
 
         doc.Load(string.Format(CultureInfo.InvariantCulture, APIUrlRegionFromLatLong, latitude, longitude) + "&key=" + APIKey);
 
