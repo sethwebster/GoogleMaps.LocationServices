@@ -12,7 +12,8 @@ A lightweight .NET library for Google Maps geolocation workflows:
 
 ```bash
 # Package Manager
-dotnet add package GoogleMaps.LocationServices --version 2.0.0
+# Recommended current version: 2.1.0
+dotnet add package GoogleMaps.LocationServices --version 2.1.0
 
 # or
 PM> Install-Package GoogleMaps.LocationServices
@@ -71,18 +72,50 @@ foreach (var step in directions.Steps)
 }
 ```
 
-The package also supports the legacy no-key constructor:
+### Async overloads
+
+Use async methods for non-blocking calls (recommended in services and UI apps):
 
 ```csharp
-var legacyClient = new GoogleLocationService();
+using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+var point = await client.GetLatLongFromAddressAsync("1600 Amphitheatre Parkway", cts.Token);
+var region = await client.GetRegionFromLatLongAsync(37.422, -122.084, cts.Token);
+var matches = await client.GetAddressesListFromAddressAsync(address);
+var route = await client.GetDirectionsAsync(address, destination, cts.Token);
 ```
 
-> For reliability and quota visibility, prefer using a valid API key.
+## Reliability and resilience defaults
+
+`GoogleLocationService` now includes request hardening for production workloads:
+
+- configurable retry count (`MaxRetryAttempts`)
+- exponential backoff with jitter (`RetryDelay`)
+- per-attempt request timeout (`RequestTimeout`)
+- cancellation support (`CancellationToken`) on async APIs
+- resilient HTTP client handling for transient network/HTTP errors (`HttpRequestException`, `TimeoutException`, `TaskCanceledException`)
+
+```csharp
+var hardened = new GoogleLocationService("YOUR_API_KEY")
+{
+    MaxRetryAttempts = 3,
+    RetryDelay = TimeSpan.FromMilliseconds(250),
+    RequestTimeout = TimeSpan.FromSeconds(8)
+};
+```
+
+You can also inject a shared `HttpClient` when integrating into DI/container-controlled clients:
+
+```csharp
+using var httpClient = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+var fromDi = new GoogleLocationService("YOUR_API_KEY", httpClient);
+```
 
 ## Error handling
 
 - `OVER_QUERY_LIMIT` throws `WebException` with an actionable message.
 - `REQUEST_DENIED` throws `WebException` when the required Google Maps APIs are not enabled.
+- transient failures honor retry configuration before surfacing an exception.
 
 ## Testing
 
@@ -95,8 +128,8 @@ dotnet test --configuration Release
 Current test target includes:
 - geocode parsing
 - reverse geocode parsing
-- coordinates formatting and mapping
 - directions parsing and failure states
+- async behavior with retry validation
 
 ## Development
 
@@ -105,7 +138,6 @@ If you are contributing, open the solution and run:
 ```bash
 dotnet restore
 dotnet build
-
 dotnet test
 dotnet pack GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj --configuration Release
 ```

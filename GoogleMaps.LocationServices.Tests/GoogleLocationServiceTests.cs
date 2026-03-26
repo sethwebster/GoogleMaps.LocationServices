@@ -1,5 +1,8 @@
 using System;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Xunit;
@@ -32,6 +35,26 @@ public class GoogleLocationServiceTests
             }
 
             return XmlDocumentLoader(requestUrl);
+        }
+
+        protected override Task<XDocument> LoadXDocumentFromUrlAsync(string requestUrl, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<XDocument>(cancellationToken);
+            }
+
+            return Task.FromResult(LoadXDocumentFromUrl(requestUrl));
+        }
+
+        protected override Task<XmlDocument> LoadXmlDocumentFromUrlAsync(string requestUrl, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<XmlDocument>(cancellationToken);
+            }
+
+            return Task.FromResult(LoadXmlDocumentFromUrl(requestUrl));
         }
     }
 
@@ -304,4 +327,81 @@ public class GoogleLocationServiceTests
         Assert.Contains("destination=Boston", captured, StringComparison.Ordinal);
         Assert.Contains("&key=api", captured, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async Task GetLatLongFromAddressAsync_RetriesTransientFailures()
+    {
+        const string response = @"
+<GeocodeResponse>
+  <status>OK</status>
+  <result>
+    <geometry>
+      <location>
+        <lat>37.422</lat>
+        <lng>-122.084</lng>
+      </location>
+    </geometry>
+  </result>
+</GeocodeResponse>";
+
+        var handler = new FlakyResponseMessageHandler(response)
+        {
+            RetryAfterTransient = 1,
+            ResponseStatus = HttpStatusCode.OK,
+        };
+
+        using var httpClient = new HttpClient(handler);
+
+        var service = new GoogleLocationService("api", httpClient)
+        {
+            MaxRetryAttempts = 3,
+            RetryDelay = TimeSpan.Zero,
+        };
+
+        var mapPoint = await service.GetLatLongFromAddressAsync("1600 Amphitheatre Parkway, Mountain View, CA");
+
+        Assert.NotNull(mapPoint);
+        Assert.Equal(2, handler.Calls);
+    }
+
+    [Fact]
+    public async Task GetLatLongFromAddressAsync_RespectsCancellation()
+    {
+        var service = new TestableGoogleLocationService("api")
+        {
+            XDocumentLoader = _ => throw new InvalidOperationException("Should not be called when canceled"),
+        };
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsAsync<TaskCanceledException>(() => service.GetLatLongFromAddressAsync("some address", cts.Token));
+    }
+
+    private sealed class FlakyResponseMessageHandler(string responseBody) : HttpMessageHandler
+    {
+        private readonly string _responseBody = responseBody;
+
+        public int Calls { get; private set; }
+
+        public int RetryAfterTransient { get; set; } = 1;
+
+        public HttpStatusCode ResponseStatus { get; set; } = HttpStatusCode.OK;
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Calls++;
+
+            if (Calls <= RetryAfterTransient)
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable));
+            }
+
+            return Task.FromResult(new HttpResponseMessage(ResponseStatus)
+            {
+                Content = new StringContent(_responseBody),
+            });
+        }
+    }
 }
+

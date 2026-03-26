@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <Authors>Seth Webster</Authors>
     <Description>A simple library for performing reverse geolocation lookups via Google Maps.
 Supports .NET Standard 2.0 and .NET 8.0 for modern cross-platform .NET usage.</Description>
@@ -17,7 +17,7 @@ Supports .NET Standard 2.0 and .NET 8.0 for modern cross-platform .NET usage.</D
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageReleaseNotes>Modernized for modern .NET SDK-style cross-platform targeting and tooling.</PackageReleaseNotes>
+    <PackageReleaseNotes>Hardened service with resilient retries, request timeout/cancellation support, async APIs, and stronger CI/test coverage for production reliability.</PackageReleaseNotes>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
