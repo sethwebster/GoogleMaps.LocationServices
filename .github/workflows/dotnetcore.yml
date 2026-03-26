@@ -63,10 +63,10 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Pack
-        run: dotnet pack GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj --configuration Release --no-restore --output nupkgs
+        run: |
+          dotnet pack GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj --configuration Release --no-restore --output nupkgs
 
       - name: Publish to NuGet
-        uses: rohith/publish-nuget@v2
-        with:
-          PROJECT_FILE_PATH: ./GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj
-          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' GoogleMaps.LocationServices/GoogleMaps.LocationServices.csproj)
+          dotnet nuget push "nupkgs/GoogleMaps.LocationServices.${VERSION}.nupkg" -k "${{ secrets.NUGET_API_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
